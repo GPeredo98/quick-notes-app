@@ -1,0 +1,23 @@
+<nav class="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto" aria-label="Recently opened notes">
+  @for (note of notes(); track note.id) {
+    <div
+      class="group flex shrink-0 max-w-40 items-center gap-1 rounded-t-lg border-b-2 px-3 py-1.5 text-sm cursor-pointer dark:text-neutral-300"
+      [class.border-neutral-900]="note.id === activeId()"
+      [class.text-neutral-900]="note.id === activeId()"
+      [class.font-medium]="note.id === activeId()"
+      [class.border-transparent]="note.id !== activeId()"
+      [class.text-neutral-500]="note.id !== activeId()"
+      (click)="select.emit(note.id)"
+    >
+      <span class="truncate">{{ note.title }}</span>
+      <button
+        type="button"
+        class="shrink-0 rounded px-1 text-neutral-400 opacity-0 hover:bg-black/5 hover:text-neutral-700 group-hover:opacity-100 dark:text-neutral-500 dark:hover:text-neutral-200"
+        title="Close tab"
+        (click)="$event.stopPropagation(); close.emit(note.id)"
+      >
+        <lucide-icon [img]="closeIcon" class="h-4 w-4"></lucide-icon>
+      </button>
+    </div>
+  }
+</nav>

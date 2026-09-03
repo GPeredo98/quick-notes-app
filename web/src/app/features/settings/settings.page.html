@@ -1,0 +1,40 @@
+<main class="mx-auto flex h-full w-full max-w-3xl flex-col px-6 py-8">
+  <header class="mb-6 flex items-center justify-between">
+    <a
+      routerLink="/"
+      class="rounded-lg px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
+    >
+      ← Back to notes
+    </a>
+    <h1 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">Settings</h1>
+  </header>
+
+  <section class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-neutral-900">
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">Signed in as</p>
+    <p class="text-base font-medium text-neutral-900 dark:text-neutral-100">{{ currentUser() }}</p>
+
+    <div class="mt-6 flex flex-col gap-3">
+      <button
+        type="button"
+        class="inline-flex items-center justify-center gap-2 rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300"
+        (click)="toggleTheme()"
+      >
+        <lucide-icon [img]="currentTheme() === 'dark' ? lightIcon : darkIcon" class="h-4 w-4"></lucide-icon>
+        {{ themeLabel() }}
+      </button>
+
+      <p class="text-sm text-neutral-500 dark:text-neutral-400">
+        Active theme: <span class="font-medium text-neutral-900 dark:text-neutral-100">{{ currentTheme() }}</span>
+      </p>
+
+      <button
+        type="button"
+        class="mt-2 inline-flex items-center justify-center gap-2 rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-950/40"
+        (click)="logout()"
+      >
+        <lucide-icon [img]="logoutIcon" class="h-4 w-4"></lucide-icon>
+        Sign out
+      </button>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,3 @@
+export const DEFAULT_NOTE_OWNER = 'You';
+export const DEFAULT_NOTE_TITLE = 'Untitled note';
+export const MAX_RECENT_NOTES = 6;

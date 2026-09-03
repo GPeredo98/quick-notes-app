@@ -1,0 +1,83 @@
+<div class="flex items-center gap-1 border-b border-neutral-200 bg-neutral-50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-800">
+  <button
+    type="button"
+    class="h-8 w-8 rounded font-bold hover:bg-black/5 dark:text-neutral-100"
+    [class.bg-neutral-900]="activeBold()"
+    [class.text-white]="activeBold()"
+    title="Bold"
+    (mousedown)="preventFocusLoss($event)"
+    (click)="toggle('bold')"
+  >
+    <lucide-icon [img]="boldIcon" class="h-4 w-4"></lucide-icon>
+  </button>
+  <button
+    type="button"
+    class="h-8 w-8 rounded italic hover:bg-black/5 dark:text-neutral-100"
+    [class.bg-neutral-900]="activeItalic()"
+    [class.text-white]="activeItalic()"
+    title="Italic"
+    (mousedown)="preventFocusLoss($event)"
+    (click)="toggle('italic')"
+  >
+    <lucide-icon [img]="italicIcon" class="h-4 w-4"></lucide-icon>
+  </button>
+  <button
+    type="button"
+    class="h-8 w-8 rounded underline hover:bg-black/5 dark:text-neutral-100"
+    [class.bg-neutral-900]="activeUnderline()"
+    [class.text-white]="activeUnderline()"
+    title="Underline"
+    (mousedown)="preventFocusLoss($event)"
+    (click)="toggle('underline')"
+  >
+    <lucide-icon [img]="underlineIcon" class="h-4 w-4"></lucide-icon>
+  </button>
+  <button
+    type="button"
+    class="h-8 w-8 rounded line-through hover:bg-black/5 dark:text-neutral-100"
+    [class.bg-neutral-900]="activeStrikeThrough()"
+    [class.text-white]="activeStrikeThrough()"
+    title="Strikethrough"
+    (mousedown)="preventFocusLoss($event)"
+    (click)="toggle('strikeThrough')"
+  >
+    <lucide-icon [img]="strikeThroughIcon" class="h-4 w-4"></lucide-icon>
+  </button>
+
+  <div class="relative">
+    <button
+      type="button"
+      class="h-8 w-8 rounded hover:bg-black/5 dark:text-neutral-100"
+      title="Highlight"
+      (mousedown)="preventFocusLoss($event)"
+      (click)="toggleHighlightPicker()"
+    >
+      <lucide-icon [img]="highlightIcon" class="h-4 w-4"></lucide-icon>
+    </button>
+
+    @if (showHighlightPicker()) {
+      <div
+        class="absolute left-0 top-9 z-10 flex items-center gap-1 rounded-lg border border-neutral-200 bg-white p-1.5 shadow-md dark:border-neutral-700 dark:bg-neutral-900"
+        (mousedown)="preventFocusLoss($event)"
+      >
+        @for (swatch of highlightSwatches; track swatch.value) {
+          <button
+            type="button"
+            class="h-6 w-6 rounded-full border border-black/10"
+            [style.backgroundColor]="swatch.value"
+            [title]="swatch.label"
+            (click)="applyHighlight(swatch.value)"
+          ></button>
+        }
+        <button
+          type="button"
+          class="h-6 w-6 rounded-full border border-black/10 bg-white text-xs text-neutral-500 dark:bg-neutral-800 dark:text-neutral-300"
+          title="Remove highlight"
+          (click)="clearHighlight()"
+        >
+          ×
+        </button>
+      </div>
+    }
+  </div>
+</div>
