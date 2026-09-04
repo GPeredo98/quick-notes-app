@@ -1,7 +1,7 @@
 <div class="flex flex-1 items-center gap-1 px-4 py-2">
   <button
     type="button"
-    class="h-8 w-8 rounded font-bold hover:bg-black/5 dark:text-neutral-100"
+    class="inline-flex h-8 w-8 items-center justify-center rounded font-bold hover:bg-black/5 dark:text-neutral-100"
     [class.bg-neutral-900]="activeBold()"
     [class.text-white]="activeBold()"
     title="Bold"
@@ -12,7 +12,7 @@
   </button>
   <button
     type="button"
-    class="h-8 w-8 rounded italic hover:bg-black/5 dark:text-neutral-100"
+    class="inline-flex h-8 w-8 items-center justify-center rounded italic hover:bg-black/5 dark:text-neutral-100"
     [class.bg-neutral-900]="activeItalic()"
     [class.text-white]="activeItalic()"
     title="Italic"
@@ -23,7 +23,7 @@
   </button>
   <button
     type="button"
-    class="h-8 w-8 rounded underline hover:bg-black/5 dark:text-neutral-100"
+    class="inline-flex h-8 w-8 items-center justify-center rounded underline hover:bg-black/5 dark:text-neutral-100"
     [class.bg-neutral-900]="activeUnderline()"
     [class.text-white]="activeUnderline()"
     title="Underline"
@@ -34,7 +34,7 @@
   </button>
   <button
     type="button"
-    class="h-8 w-8 rounded line-through hover:bg-black/5 dark:text-neutral-100"
+    class="inline-flex h-8 w-8 items-center justify-center rounded line-through hover:bg-black/5 dark:text-neutral-100"
     [class.bg-neutral-900]="activeStrikeThrough()"
     [class.text-white]="activeStrikeThrough()"
     title="Strikethrough"
@@ -47,7 +47,7 @@
   <div class="relative">
     <button
       type="button"
-      class="h-8 w-8 rounded hover:bg-black/5 dark:text-neutral-100"
+      class="inline-flex h-8 w-8 items-center justify-center rounded hover:bg-black/5 dark:text-neutral-100"
       title="Highlight"
       (mousedown)="preventFocusLoss($event)"
       (click)="toggleHighlightPicker()"

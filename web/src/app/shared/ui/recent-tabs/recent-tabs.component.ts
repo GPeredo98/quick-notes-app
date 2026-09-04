@@ -7,6 +7,7 @@ import { Note } from '../../../core/models/note.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LucideAngularModule],
   templateUrl: './recent-tabs.component.html',
+  host: { class: 'flex min-w-0 flex-1' },
 })
 export class RecentTabsComponent {
   readonly notes = input.required<Note[]>();

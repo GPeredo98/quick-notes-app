@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './core/auth/auth.service';
 import { ThemeService } from './core/theme/theme.service';
+import { AppUpdateService } from './core/update/app-update.service';
 
 @Component({
   imports: [RouterOutlet],
@@ -14,5 +15,8 @@ export class App {
     // Force service initialization when the app starts.
     private readonly _themeService: ThemeService,
     private readonly _authService: AuthService,
-  ) {}
+    appUpdateService: AppUpdateService,
+  ) {
+    appUpdateService.init();
+  }
 }

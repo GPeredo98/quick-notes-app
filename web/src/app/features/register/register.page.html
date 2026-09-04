@@ -9,7 +9,7 @@
         <input
           type="email"
           required
-          class="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-neutral-900 outline-none focus:border-neutral-500 dark:border-neutral-600 dark:bg-neutral-950 dark:text-neutral-100"
+          class="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-base text-neutral-900 outline-none focus:border-neutral-500 dark:border-neutral-600 dark:bg-neutral-950 dark:text-neutral-100"
           [ngModel]="email()"
           (ngModelChange)="email.set($event)"
           name="email"
@@ -22,7 +22,7 @@
           type="password"
           required
           minlength="6"
-          class="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-neutral-900 outline-none focus:border-neutral-500 dark:border-neutral-600 dark:bg-neutral-950 dark:text-neutral-100"
+          class="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-base text-neutral-900 outline-none focus:border-neutral-500 dark:border-neutral-600 dark:bg-neutral-950 dark:text-neutral-100"
           [ngModel]="password()"
           (ngModelChange)="password.set($event)"
           name="password"
