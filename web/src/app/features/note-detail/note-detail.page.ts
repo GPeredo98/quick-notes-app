@@ -6,15 +6,15 @@ import {
   effect,
   inject,
   input,
+  signal,
   untracked,
   viewChild,
 } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { ArrowLeft, LucideAngularModule, Pin, Trash2 } from 'lucide-angular';
+import { ArrowLeft, LucideAngularModule, Pin, Settings, Trash2 } from 'lucide-angular';
 import { NotesFacade } from '../../application/notes.facade';
 import { NoteColor } from '../../core/models/note.model';
-import { NOTE_COLOR_SWATCHES } from '../../shared/constants/note-colors';
+import { cardClassForColor, NOTE_COLOR_SWATCHES } from '../../shared/constants/note-colors';
 import { debounce } from '../../shared/utils/debounce.util';
 import { FormattingToolbarComponent } from '../../shared/ui/formatting-toolbar/formatting-toolbar.component';
 import { RecentTabsComponent } from '../../shared/ui/recent-tabs/recent-tabs.component';
@@ -22,7 +22,7 @@ import { RecentTabsComponent } from '../../shared/ui/recent-tabs/recent-tabs.com
 @Component({
   selector: 'qn-note-detail-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LucideAngularModule, RouterLink, DatePipe, FormattingToolbarComponent, RecentTabsComponent],
+  imports: [LucideAngularModule, RouterLink, FormattingToolbarComponent, RecentTabsComponent],
   templateUrl: './note-detail.page.html',
 })
 export class NoteDetailPage {
@@ -34,9 +34,12 @@ export class NoteDetailPage {
   protected readonly note = computed(() => this.facade.notes().find((n) => n.id === this.id()));
   protected readonly recentNotes = this.facade.recentNotes;
   protected readonly colorSwatches = NOTE_COLOR_SWATCHES;
+  protected readonly cardClass = computed(() => cardClassForColor(this.note()?.color ?? 'default'));
+  protected readonly showColorPanel = signal(false);
   protected readonly backIcon = ArrowLeft;
   protected readonly pinIcon = Pin;
   protected readonly trashIcon = Trash2;
+  protected readonly settingsIcon = Settings;
 
   private readonly titleInput = viewChild<ElementRef<HTMLInputElement>>('titleInput');
   private readonly editor = viewChild<ElementRef<HTMLDivElement>>('editor');
@@ -85,6 +88,10 @@ export class NoteDetailPage {
 
   protected selectColor(color: NoteColor): void {
     this.facade.updateColor(this.id(), color);
+  }
+
+  protected toggleColorPanel(): void {
+    this.showColorPanel.update((value) => !value);
   }
 
   protected togglePinned(): void {

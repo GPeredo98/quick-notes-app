@@ -1,4 +1,4 @@
-<div class="flex items-center gap-1 border-b border-neutral-200 bg-neutral-50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-800">
+<div class="flex flex-1 items-center gap-1 px-4 py-2">
   <button
     type="button"
     class="h-8 w-8 rounded font-bold hover:bg-black/5 dark:text-neutral-100"
@@ -57,7 +57,7 @@
 
     @if (showHighlightPicker()) {
       <div
-        class="absolute left-0 top-9 z-10 flex items-center gap-1 rounded-lg border border-neutral-200 bg-white p-1.5 shadow-md dark:border-neutral-700 dark:bg-neutral-900"
+        class="absolute bottom-9 left-0 z-10 flex items-center gap-1 rounded-lg border border-neutral-200 bg-white p-1.5 shadow-md dark:border-neutral-700 dark:bg-neutral-900"
         (mousedown)="preventFocusLoss($event)"
       >
         @for (swatch of highlightSwatches; track swatch.value) {

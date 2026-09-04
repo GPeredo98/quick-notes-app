@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { LogIn, LucideAngularModule } from 'lucide-angular';
+import { LogIn, LucideAngularModule, Mail, Lock } from 'lucide-angular';
 import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
@@ -18,6 +18,8 @@ export class LoginPage {
   protected readonly password = signal('');
   protected readonly errorMessage = signal('');
   protected readonly loginIcon = LogIn;
+  protected readonly mailIcon = Mail;
+  protected readonly lockIcon = Lock;
 
   protected submit(): void {
     const result = this.authService.login(this.email(), this.password());
