@@ -1,8 +1,8 @@
 import { InjectionToken } from '@angular/core';
 
 export interface RecentNotesRepository {
-  getRecentIds(): string[];
-  saveRecentIds(ids: string[]): void;
+  getRecentIds(): Promise<string[]>;
+  saveRecentIds(ids: string[]): Promise<void>;
 }
 
 export const RECENT_NOTES_REPOSITORY = new InjectionToken<RecentNotesRepository>(

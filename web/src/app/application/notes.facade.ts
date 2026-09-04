@@ -16,16 +16,24 @@ export class NotesFacade {
   private readonly recentNotesRepository = inject(RECENT_NOTES_REPOSITORY);
   private readonly authService = inject(AuthService);
 
-  private readonly notesState = signal<Note[]>(this.noteRepository.getAll());
-  private readonly recentIdsState = signal<string[]>(this.recentNotesRepository.getRecentIds());
+  private readonly notesState = signal<Note[]>([]);
+  private readonly recentIdsState = signal<string[]>([]);
 
   constructor() {
     // Keep in-memory notes aligned with the authenticated account.
     effect(() => {
       this.authService.currentUser();
-      this.notesState.set(this.noteRepository.getAll());
-      this.recentIdsState.set(this.recentNotesRepository.getRecentIds());
+      void this.reload();
     });
+  }
+
+  private async reload(): Promise<void> {
+    const [notes, recentIds] = await Promise.all([
+      this.noteRepository.getAll(),
+      this.recentNotesRepository.getRecentIds(),
+    ]);
+    this.notesState.set(notes);
+    this.recentIdsState.set(recentIds);
   }
 
   /** All notes, pinned first, most recently updated first. */
@@ -63,7 +71,7 @@ export class NotesFacade {
       pinned: false,
     };
     this.notesState.update((notes) => [...notes, note]);
-    this.noteRepository.save(note);
+    void this.noteRepository.save(note);
     return note;
   }
 
@@ -89,7 +97,7 @@ export class NotesFacade {
 
   deleteNote(id: string): void {
     this.notesState.update((notes) => notes.filter((note) => note.id !== id));
-    this.noteRepository.delete(id);
+    void this.noteRepository.delete(id);
     this.removeFromRecent(id);
   }
 
@@ -102,13 +110,13 @@ export class NotesFacade {
       const withoutId = ids.filter((recentId) => recentId !== id);
       return [id, ...withoutId].slice(0, MAX_RECENT_NOTES);
     });
-    this.recentNotesRepository.saveRecentIds(this.recentIdsState());
+    void this.recentNotesRepository.saveRecentIds(this.recentIdsState());
   }
 
   /** Removes a note from the recent tabs without deleting the note itself. */
   removeFromRecent(id: string): void {
     this.recentIdsState.update((ids) => ids.filter((recentId) => recentId !== id));
-    this.recentNotesRepository.saveRecentIds(this.recentIdsState());
+    void this.recentNotesRepository.saveRecentIds(this.recentIdsState());
   }
 
   private updateNote(id: string, changes: Partial<Omit<Note, 'id' | 'createdAt'>>): void {
@@ -123,7 +131,7 @@ export class NotesFacade {
       }),
     );
     if (updated) {
-      this.noteRepository.save(updated);
+      void this.noteRepository.save(updated);
     }
   }
 }

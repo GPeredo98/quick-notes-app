@@ -19,10 +19,16 @@ export class RegisterPage {
   protected readonly errorMessage = signal('');
   protected readonly registerIcon = UserPlus;
 
-  protected submit(): void {
-    const result = this.authService.register(this.email(), this.password());
+  protected async submit(): Promise<void> {
+    const result = await this.authService.register(this.email(), this.password());
     if (!result.success) {
       this.errorMessage.set(result.message ?? 'Unable to create account.');
+      return;
+    }
+
+    if (!this.authService.isAuthenticated()) {
+      // Email confirmation required before a session exists.
+      this.errorMessage.set(result.message ?? 'Check your email to confirm your account.');
       return;
     }
 

@@ -21,8 +21,8 @@ export class LoginPage {
   protected readonly mailIcon = Mail;
   protected readonly lockIcon = Lock;
 
-  protected submit(): void {
-    const result = this.authService.login(this.email(), this.password());
+  protected async submit(): Promise<void> {
+    const result = await this.authService.login(this.email(), this.password());
     if (!result.success) {
       this.errorMessage.set(result.message ?? 'Unable to sign in.');
       return;

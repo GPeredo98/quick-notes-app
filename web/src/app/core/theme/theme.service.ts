@@ -1,15 +1,25 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable, signal } from '@angular/core';
-import { LOCAL_STORAGE_KEYS } from '../../infrastructure/persistence/local-storage-keys';
+import { Inject, Injectable, effect, inject, signal } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
+import { supabase } from '../supabase/supabase-client';
 
 export type ThemeMode = 'dark' | 'light';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-  readonly currentTheme = signal<ThemeMode>(this.readTheme());
+  private readonly authService = inject(AuthService);
+
+  readonly currentTheme = signal<ThemeMode>('dark');
 
   constructor(@Inject(DOCUMENT) private readonly document: Document) {
     this.applyTheme(this.currentTheme());
+
+    effect(() => {
+      const userId = this.authService.currentUserId();
+      if (userId) {
+        void this.loadTheme(userId);
+      }
+    });
   }
 
   toggleTheme(): void {
@@ -18,13 +28,31 @@ export class ThemeService {
 
   setTheme(theme: ThemeMode): void {
     this.currentTheme.set(theme);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.theme, theme);
+    this.applyTheme(theme);
+
+    const userId = this.authService.currentUserId();
+    if (userId) {
+      void this.saveTheme(userId, theme);
+    }
+  }
+
+  private async loadTheme(userId: string): Promise<void> {
+    const { data, error } = await supabase.from('profiles').select('theme').eq('id', userId).maybeSingle();
+    if (error) {
+      console.error('Failed to load theme preference', error);
+      return;
+    }
+
+    const theme: ThemeMode = data?.theme === 'light' ? 'light' : 'dark';
+    this.currentTheme.set(theme);
     this.applyTheme(theme);
   }
 
-  private readTheme(): ThemeMode {
-    const storedValue = localStorage.getItem(LOCAL_STORAGE_KEYS.theme);
-    return storedValue === 'light' ? 'light' : 'dark';
+  private async saveTheme(userId: string, theme: ThemeMode): Promise<void> {
+    const { error } = await supabase.from('profiles').upsert({ id: userId, theme });
+    if (error) {
+      console.error('Failed to save theme preference', error);
+    }
   }
 
   private applyTheme(theme: ThemeMode): void {

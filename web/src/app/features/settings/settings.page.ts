@@ -28,8 +28,8 @@ export class SettingsPage {
     this.themeService.toggleTheme();
   }
 
-  protected logout(): void {
-    this.authService.logout();
+  protected async logout(): Promise<void> {
+    await this.authService.logout();
     this.router.navigate(['/login']);
   }
 }
