@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, effect, input, output, signal, viewChild } from '@angular/core';
 import { LucideAngularModule, X } from 'lucide-angular';
 import { Note } from '../../../core/models/note.model';
 
@@ -12,9 +12,51 @@ import { Note } from '../../../core/models/note.model';
 export class RecentTabsComponent {
   readonly notes = input.required<Note[]>();
   readonly activeId = input.required<string>();
+  readonly autoRenameId = input<string | null>(null);
 
-  readonly select = output<string>();
+  readonly open = output<string>();
   readonly close = output<string>();
+  readonly rename = output<{ id: string; title: string }>();
 
+  protected readonly editingId = signal<string | null>(null);
   protected readonly closeIcon = X;
+
+  private readonly renameInput = viewChild<ElementRef<HTMLInputElement>>('renameInput');
+
+  constructor() {
+    // A freshly created note arrives ready to be renamed inline.
+    effect(() => {
+      const id = this.autoRenameId();
+      if (id) {
+        this.editingId.set(id);
+      }
+    });
+
+    // Focus and select the rename input as soon as it appears in the DOM.
+    effect(() => {
+      debugger
+      const el = this.renameInput();
+      if (el && this.editingId()) {
+        el.nativeElement.focus();
+        el.nativeElement.select();
+      }
+    });
+  }
+
+  protected onTabClick(note: Note): void {
+    debugger
+    if (note.id !== this.activeId()) {
+      this.open.emit(note.id);
+      return;
+    }
+    if (this.editingId() !== note.id) {
+      this.editingId.set(note.id);
+    }
+  }
+
+  protected commitRename(id: string, event: FocusEvent): void {
+    const title = (event.target as HTMLInputElement).value;
+    this.editingId.set(null);
+    this.rename.emit({ id, title });
+  }
 }

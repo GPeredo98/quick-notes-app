@@ -3,7 +3,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { RecentNotesRepository } from '../../core/ports/recent-notes-repository.port';
 import { supabase } from '../../core/supabase/supabase-client';
 
-/** Recent tab ids are stored as a jsonb array on the `profiles` row (column `recent_note_ids`). */
+/** Recent tab ids are stored as a jsonb array on the `profiles` row (column `recent_notes_ids`). */
 @Injectable()
 export class SupabaseRecentNotesRepository implements RecentNotesRepository {
   private readonly authService = inject(AuthService);
@@ -16,7 +16,7 @@ export class SupabaseRecentNotesRepository implements RecentNotesRepository {
 
     const { data, error } = await supabase
       .from('profiles')
-      .select('recent_note_ids')
+      .select('recent_notes_ids')
       .eq('id', userId)
       .maybeSingle();
 
@@ -25,7 +25,7 @@ export class SupabaseRecentNotesRepository implements RecentNotesRepository {
       return [];
     }
 
-    return (data?.recent_note_ids as string[] | null) ?? [];
+    return (data?.recent_notes_ids as string[] | null) ?? [];
   }
 
   async saveRecentIds(ids: string[]): Promise<void> {
@@ -34,7 +34,7 @@ export class SupabaseRecentNotesRepository implements RecentNotesRepository {
       return;
     }
 
-    const { error } = await supabase.from('profiles').upsert({ id: userId, recent_note_ids: ids });
+    const { error } = await supabase.from('profiles').upsert({ id: userId, recent_notes_ids: ids });
     if (error) {
       console.error('Failed to save recent notes', error);
     }

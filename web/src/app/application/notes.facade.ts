@@ -19,6 +19,9 @@ export class NotesFacade {
   private readonly notesState = signal<Note[]>([]);
   private readonly recentIdsState = signal<string[]>([]);
 
+  /** Id of the note just created, consumed once to trigger inline rename in the tabs bar. */
+  readonly newNoteId = signal<string | null>(null);
+
   constructor() {
     // Keep in-memory notes aligned with the authenticated account.
     effect(() => {
@@ -72,7 +75,13 @@ export class NotesFacade {
     };
     this.notesState.update((notes) => [...notes, note]);
     void this.noteRepository.save(note);
+    this.newNoteId.set(note.id);
     return note;
+  }
+
+  /** Consumes the pending new-note marker so inline rename only triggers once. */
+  clearNewNoteId(): void {
+    this.newNoteId.set(null);
   }
 
   updateTitle(id: string, title: string): void {

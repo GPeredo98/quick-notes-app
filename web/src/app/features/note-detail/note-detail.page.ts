@@ -36,27 +36,30 @@ export class NoteDetailPage {
   protected readonly colorSwatches = NOTE_COLOR_SWATCHES;
   protected readonly cardClass = computed(() => cardClassForColor(this.note()?.color ?? 'default'));
   protected readonly showColorPanel = signal(false);
+  protected readonly autoRenameId = signal<string | null>(null);
   protected readonly backIcon = ArrowLeft;
   protected readonly pinIcon = Pin;
   protected readonly trashIcon = Trash2;
   protected readonly settingsIcon = Settings;
 
-  private readonly titleInput = viewChild<ElementRef<HTMLInputElement>>('titleInput');
   private readonly editor = viewChild<ElementRef<HTMLDivElement>>('editor');
 
-  private readonly saveTitle = debounce((id: string, title: string) => this.facade.updateTitle(id, title), 300);
   private readonly saveContent = debounce((id: string, html: string) => this.facade.updateContent(id, html), 300);
 
   constructor() {
-    // Track this note as opened (recent tabs) whenever the route id changes,
-    // or bounce back to the list if the note no longer exists.
+    // Track this note as opened (recent tabs), trigger inline rename for
+    // freshly created notes, or bounce back to the list if it no longer exists.
     effect(() => {
       const id = this.id();
       untracked(() => {
-        if (this.facade.noteById(id)) {
-          this.facade.openNote(id);
-        } else {
+        if (!this.facade.noteById(id)) {
           this.router.navigate(['/']);
+          return;
+        }
+        this.facade.openNote(id);
+        if (this.facade.newNoteId() === id) {
+          this.autoRenameId.set(id);
+          this.facade.clearNewNoteId();
         }
       });
     });
@@ -66,19 +69,12 @@ export class NoteDetailPage {
     effect(() => {
       const id = this.id();
       const editorEl = this.editor();
-      const titleEl = this.titleInput();
-      if (!editorEl || !titleEl) {
+      if (!editorEl) {
         return;
       }
       const note = untracked(() => this.facade.noteById(id));
       editorEl.nativeElement.innerHTML = note?.contentHtml ?? '';
-      titleEl.nativeElement.value = note?.title ?? '';
     });
-  }
-
-  protected onTitleInput(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.saveTitle(this.id(), value);
   }
 
   protected onContentInput(event: Event): void {
@@ -87,7 +83,12 @@ export class NoteDetailPage {
   }
 
   protected selectColor(color: NoteColor): void {
+    debugger
     this.facade.updateColor(this.id(), color);
+  }
+
+  protected onRenameNote(event: { id: string; title: string }): void {
+    this.facade.updateTitle(event.id, event.title);
   }
 
   protected toggleColorPanel(): void {
@@ -104,10 +105,12 @@ export class NoteDetailPage {
   }
 
   protected openRecentNote(id: string): void {
+    debugger
     this.router.navigate(['/note', id]);
   }
 
   protected closeRecentTab(id: string): void {
+    debugger
     const wasActiveTab = id === this.id();
     this.facade.removeFromRecent(id);
     if (wasActiveTab) {

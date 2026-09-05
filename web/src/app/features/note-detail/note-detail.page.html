@@ -1,6 +1,6 @@
 <div class="flex h-full flex-col" [class]="cardClass()">
   <header class="flex flex-col border-b border-neutral-200/70 dark:border-neutral-700/70">
-    <div class="flex min-w-0 items-center gap-2 overflow-hidden px-4 pt-3">
+    <div class="flex min-w-0 items-center gap-2 overflow-hidden px-4 py-3">
       <a
         routerLink="/"
         class="flex shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 text-sm text-neutral-600 hover:bg-black/5 dark:text-neutral-300 dark:hover:bg-white/5"
@@ -13,18 +13,12 @@
       <qn-recent-tabs
         [notes]="recentNotes()"
         [activeId]="id()"
-        (select)="openRecentNote($event)"
+        [autoRenameId]="autoRenameId()"
+        (open)="openRecentNote($event)"
         (close)="closeRecentTab($event)"
+        (rename)="onRenameNote($event)"
       />
     </div>
-
-    <input
-      #titleInput
-      type="text"
-      placeholder="Untitled note"
-      class="w-full border-none bg-transparent px-4 py-3 text-2xl font-semibold text-neutral-900 outline-none placeholder:text-neutral-300 dark:text-neutral-100 dark:placeholder:text-neutral-600"
-      (input)="onTitleInput($event)"
-    />
   </header>
 
   <div
