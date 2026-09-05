@@ -24,6 +24,11 @@ import { RecentTabsComponent } from '../../shared/ui/recent-tabs/recent-tabs.com
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LucideAngularModule, RouterLink, FormattingToolbarComponent, RecentTabsComponent],
   templateUrl: './note-detail.page.html',
+  host: {
+    class: 'absolute inset-0 z-10 block h-full w-full',
+    'animate.enter': "'animate-slide-in-right'",
+    'animate.leave': "'animate-slide-out-right'",
+  },
 })
 export class NoteDetailPage {
   private readonly facade = inject(NotesFacade);
