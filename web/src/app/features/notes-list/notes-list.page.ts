@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { FilePlus, LucideAngularModule, Settings2 } from 'lucide-angular';
+import { LucideAngularModule, Plus, Settings2 } from 'lucide-angular';
 import { NotesFacade } from '../../application/notes.facade';
 import { AuthService } from '../../core/auth/auth.service';
 import { NoteCardComponent } from '../../shared/ui/note-card/note-card.component';
@@ -19,7 +19,7 @@ export class NotesListPage {
   protected readonly notes = this.facade.notes;
   protected readonly currentUser = this.authService.currentUser;
   protected readonly settingsIcon = Settings2;
-  protected readonly newNoteIcon = FilePlus;
+  protected readonly newNoteIcon = Plus;
 
   protected createNote(): void {
     const note = this.facade.createNote();
