@@ -1,6 +1,6 @@
 {
-  "name": "quick-notes-web",
-  "short_name": "quick-notes-web",
+  "name": "Jottings",
+  "short_name": "Jottings",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

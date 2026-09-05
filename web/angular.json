@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "quick-notes-web": {
+    "jottings-app": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -57,10 +57,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "quick-notes-web:build:production"
+              "buildTarget": "jottings-app:build:production"
             },
             "development": {
-              "buildTarget": "quick-notes-web:build:development"
+              "buildTarget": "jottings-app:build:development"
             }
           },
           "defaultConfiguration": "development"
